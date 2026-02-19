@@ -17,5 +17,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("lazy").setup({
-  -- Plugins will be added here incrementally
+  { "neovim/nvim-lspconfig" },
 })
+
+-- Enable language servers
+-- nvim-lspconfig provides the config data (filetypes, root markers, defaults).
+-- vim.lsp.enable() activates them using Neovim's native LSP client.
+vim.lsp.enable("clangd")
