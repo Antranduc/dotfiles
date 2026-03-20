@@ -8,10 +8,17 @@ if ! command -v stow &> /dev/null; then
   exit 1
 fi
 
-echo "Stowing packages from $DOTFILES_DIR..."
+OS="$(uname -s)"
+LINUX_ONLY="sway"
+
+echo "Stowing packages from $DOTFILES_DIR (OS: $OS)..."
 
 for dir in "$DOTFILES_DIR"/*/; do
   package="$(basename "$dir")"
+  if echo "$LINUX_ONLY" | grep -qw "$package" && [ "$OS" != "Linux" ]; then
+    echo "  $package (skipped — Linux only)"
+    continue
+  fi
   echo "  $package"
   stow -t ~ -d "$DOTFILES_DIR" "$package"
 done
