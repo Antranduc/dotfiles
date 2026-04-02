@@ -8,18 +8,27 @@ if ! command -v stow &> /dev/null; then
   exit 1
 fi
 
-OS="$(uname -s)"
-LINUX_ONLY="sway"
+if [ $# -eq 0 ]; then
+  echo "Usage: install.sh <package> [package ...]"
+  echo "Available packages:"
+  for dir in "$DOTFILES_DIR"/*/; do
+    name="$(basename "$dir")"
+    [ "$name" = "docs" ] && continue
+    echo "  $name"
+  done
+  exit 1
+fi
 
-echo "Stowing packages from $DOTFILES_DIR (OS: $OS)..."
-
-for dir in "$DOTFILES_DIR"/*/; do
-  package="$(basename "$dir")"
-  if echo "$LINUX_ONLY" | grep -qw "$package" && [ "$OS" != "Linux" ]; then
-    echo "  $package (skipped — Linux only)"
-    continue
+for package in "$@"; do
+  if [ "$package" = "docs" ]; then
+    echo "Error: 'docs' is not an installable package"
+    exit 1
   fi
-  echo "  $package"
+  if [ ! -d "$DOTFILES_DIR/$package" ]; then
+    echo "Error: package '$package' not found in $DOTFILES_DIR"
+    exit 1
+  fi
+  echo "Stowing $package..."
   stow -t ~ -d "$DOTFILES_DIR" "$package"
 done
 
