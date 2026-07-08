@@ -10,6 +10,7 @@ Each top-level directory is a Stow package. The directory structure inside mirro
 dotfiles/
 ├── nvim/.config/nvim/   → ~/.config/nvim/
 ├── sway/.config/sway/   → ~/.config/sway/
+├── tmux/.config/tmux/   → ~/.config/tmux/
 ├── docs/                → setup guides (not stowed)
 └── ...                  → future packages
 ```
